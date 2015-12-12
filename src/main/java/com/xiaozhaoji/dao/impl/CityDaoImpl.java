@@ -10,8 +10,15 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-@Repository
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Repository(value = "cityDao")
 public class CityDaoImpl extends SpringCommonDao implements CityDao {
+
+    public CityDaoImpl() {
+        log.info("creating bean");
+    }
 
     @Override
     public City getCityById(Long id) {

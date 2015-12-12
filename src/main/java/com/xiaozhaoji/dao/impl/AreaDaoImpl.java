@@ -11,9 +11,15 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
-@Repository
+@Slf4j
+@Repository(value = "areaDao")
 public class AreaDaoImpl extends SpringCommonDao implements AreaDao {
+
+    public AreaDaoImpl() {
+        log.info("creating bean");
+    }
 
     @Override
     public Area getAreaById(@NonNull Long id) {

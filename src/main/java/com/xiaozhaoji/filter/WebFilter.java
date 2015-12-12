@@ -11,11 +11,11 @@ import com.xiaozhaoji.utils.JacksonUtil;
 import com.xiaozhaoji.utils.NetworkUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 
 import java.io.IOException;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -36,17 +36,36 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WebFilter implements Filter {
 
-    @Resource
+    XmlBeanDefinitionReader c;
     private CityDao cityDao;
-    @Resource
     private AreaDao areaDao;
     private final static String IP_RESOLVING_URL = "http://ip.taobao.com/service/getIpInfo.php";
+
+    public CityDao getCityDao() {
+
+        return cityDao;
+    }
+
+    public void setCityDao(CityDao cityDao) {
+
+        this.cityDao = cityDao;
+    }
+
+    public AreaDao getAreaDao() {
+
+        return areaDao;
+    }
+
+    public void setAreaDao(AreaDao areaDao) {
+
+        this.areaDao = areaDao;
+    }
 
     /**
      * Default constructor.
      */
     public WebFilter() {
-        // TODO Auto-generated constructor stub
+        log.info("creating bean");
     }
 
     /**
@@ -173,11 +192,11 @@ public class WebFilter implements Filter {
     }
 
     public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
-        String data = resolveIP("220.181.111.188");
-        log.debug("data = {}", data);
-
-        TaoBaoIpData tbData = JacksonUtil.str2Obj(data, TaoBaoIpData.class);
-
-        log.debug("tbData ={}", tbData);
+        // String data = resolveIP("220.181.111.188");
+        // log.debug("data = {}", data);
+        //
+        // TaoBaoIpData tbData = JacksonUtil.str2Obj(data, TaoBaoIpData.class);
+        //
+        // log.debug("tbData ={}", tbData);
     }
 }
