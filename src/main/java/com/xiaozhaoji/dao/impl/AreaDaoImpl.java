@@ -4,8 +4,10 @@ import com.google.common.collect.Maps;
 import com.xiaozhaoji.dao.AreaDao;
 import com.xiaozhaoji.dao.po.Area;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -37,10 +39,16 @@ public class AreaDaoImpl extends SpringCommonDao implements AreaDao {
     @Override
     public Long getAreaIdByAreaName(String name) {
 
+        if (StringUtils.isEmpty(name)) {
+            return DEFAULT_AREA_ID;
+        }
         String sql = "select id from area where name like :name";
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("name", name + '%');
-        return this.getNamedJdbcTemplate().queryForObject(sql, paramMap, Long.class);
-
+        List<Long> list = this.getNamedJdbcTemplate().queryForList(sql, paramMap, Long.class);
+        if (CollectionUtils.isEmpty(list)) {
+            return DEFAULT_AREA_ID;
+        }
+        return list.get(0);
     }
 }

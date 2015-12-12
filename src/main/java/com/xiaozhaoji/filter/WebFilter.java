@@ -11,7 +11,6 @@ import com.xiaozhaoji.utils.JacksonUtil;
 import com.xiaozhaoji.utils.NetworkUtil;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 
 import java.io.IOException;
 import java.util.Map;
@@ -36,7 +35,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WebFilter implements Filter {
 
-    XmlBeanDefinitionReader c;
     private CityDao cityDao;
     private AreaDao areaDao;
     private final static String IP_RESOLVING_URL = "http://ip.taobao.com/service/getIpInfo.php";
@@ -90,23 +88,36 @@ public class WebFilter implements Filter {
             ctx = new WebContext();
             log.info("session id = {}", session.getId());
             // 先从cookie获取
-            Cookie cookie = getCookieByName(req.getCookies(), WebContext.COOKIE_AREA_ID_NAME);
-            if (cookie != null && StringUtils.isNumeric(cookie.getValue())) {
-                ctx.setAreaId(Long.parseLong(cookie.getValue()));
-            } else {
+            Cookie areaCookie = getCookieByName(req.getCookies(), WebContext.COOKIE_AREA_ID_NAME);
+            Cookie cityCookie = getCookieByName(req.getCookies(), WebContext.COOKIE_CITY_ID_NAME);
+
+            if (areaCookie != null && StringUtils.isNumeric(areaCookie.getValue())) {
+                ctx.setAreaId(Long.parseLong(areaCookie.getValue()));
+            }
+
+            if (cityCookie != null && StringUtils.isNumeric(cityCookie.getValue())) {
+                ctx.setCityId(Long.parseLong(cityCookie.getValue()));
+            }
+
+            if (ctx.getAreaId() == null || ctx.getCityId() == null) {
                 // cookie中没有，使用ip通过httpClient来获取
                 String clientIp = NetworkUtil.getIpAddress(req);
                 log.debug("clientIp = {}", clientIp);
-                TaoBaoIpInnerData data = getCityNameByIp(clientIp);
+                TaoBaoIpInnerData data = getPosDataByIp(clientIp);
 
                 if (data != null) {
                     // 获取后，放入ctx
                     Long cityId = cityDao.getCityIdByCityName(data.getCity());
                     Long areaId = areaDao.getAreaIdByAreaName(data.getArea());
-
+                    ctx.setAreaId(areaId);
+                    ctx.setCityId(cityId);
                 } else {
-                    // 通过ip也没有获取到，设置为北京。
+                    ctx.setAreaId(AreaDao.DEFAULT_AREA_ID);
+                    ctx.setCityId(CityDao.DEFAULT_CITY_ID);
                 }
+
+                session.setAttribute(WebContext.COOKIE_AREA_ID_NAME, ctx.getAreaId());
+                session.setAttribute(WebContext.COOKIE_CITY_ID_NAME, ctx.getCityId());
             }
             session.setAttribute(WebContext.CTX_NAME, ctx);
 
@@ -152,13 +163,18 @@ public class WebFilter implements Filter {
         } catch (IOException e) {
             e.printStackTrace();
             log.info("e = {}", e);
+        } catch (Throwable e) {
+            log.warn("e = {}", e.toString());
         }
 
         return tbData;
     }
 
-    private static TaoBaoIpInnerData getCityNameByIp(String ip) {
+    private static TaoBaoIpInnerData getPosDataByIp(String ip) {
         TaoBaoIpData data = resolveIP(ip);
+        if (data == null || data.data == null) {
+            return null;
+        }
         return data.data;
     }
 

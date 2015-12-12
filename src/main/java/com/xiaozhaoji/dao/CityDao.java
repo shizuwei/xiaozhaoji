@@ -9,6 +9,8 @@ import com.xiaozhaoji.dao.po.City;
 import java.util.List;
 
 public interface CityDao {
+    public static final Long DEFAULT_CITY_ID = 1L;
+
     City getCityById(Long id);
 
     List<City> getCityByAreaId(Long areaId);

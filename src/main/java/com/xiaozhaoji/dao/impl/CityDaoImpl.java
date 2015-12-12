@@ -4,8 +4,10 @@ import com.google.common.collect.Maps;
 import com.xiaozhaoji.dao.CityDao;
 import com.xiaozhaoji.dao.po.City;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -41,11 +43,17 @@ public class CityDaoImpl extends SpringCommonDao implements CityDao {
 
     @Override
     public Long getCityIdByCityName(String name) {
-
+        if (StringUtils.isEmpty(name)) {
+            return DEFAULT_CITY_ID;
+        }
         String sql = "select id from city where name like :name";
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("name", name + '%');
-        return this.getNamedJdbcTemplate().queryForObject(sql, paramMap, Long.class);
+        List<Long> list = this.getNamedJdbcTemplate().queryForList(sql, paramMap, Long.class);
+        if (CollectionUtils.isEmpty(list)) {
+            return DEFAULT_CITY_ID;
+        }
+        return list.get(0);
 
     }
 

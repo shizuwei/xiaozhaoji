@@ -137,9 +137,7 @@ public class HttpClientUtils {
 
         try {
             long current = System.currentTimeMillis();
-            if (logger.isDebugEnabled()) {
-                logger.debug("send request:{}", request);
-            }
+            logger.debug("send request:{}", request);
             String result = httpClient.execute(request, new StringResponseHandler(request, charset));
             logger.info("cost:{} ms to execute http method:{},url:{}", System.currentTimeMillis() - current,
                 request.getMethod(), request.getURI());
@@ -176,11 +174,9 @@ public class HttpClientUtils {
         public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
             try {
                 StatusLine status = response.getStatusLine();
-                if (logger.isDebugEnabled()) {
-                    logger.debug("doPost - execute end, url:{}, status:{}", request.getURI(), status);
-                }
+                logger.debug("doPost - execute end, url:{}, status:{}", request.getURI(), status);
                 if (status.getStatusCode() != HttpStatus.SC_OK) {
-                    request.abort();
+                    // request.abort();
                     throw new RuntimeException("HttpClient,error status code :" + status);
                 }
                 HttpEntity responseEntity = response.getEntity();
@@ -188,9 +184,7 @@ public class HttpClientUtils {
                 if (responseEntity != null) {
                     result = EntityUtils.toString(responseEntity, charset);
                 }
-                if (logger.isDebugEnabled()) {
-                    logger.debug("http response - url:{}, status:{}, response:{}", request.getURI(), status, result);
-                }
+                logger.debug("http response - url:{}, status:{}, response:{}", request.getURI(), status, result);
                 return result;
             } finally {
                 if (response != null) {
