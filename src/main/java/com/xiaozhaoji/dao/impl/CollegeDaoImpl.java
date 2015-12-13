@@ -26,10 +26,16 @@ public class CollegeDaoImpl extends SpringCommonDao implements CollegeDao {
 
     @Override
     public List<College> getCollegeByCityId(Long cityId) {
+        String sql = null;
+        Map<String, Object> paramMap = null;
+        if (cityId != null) {
+            sql = "select * from college where city_id=:cityId and valid = 1";
+            paramMap = Maps.newHashMap();
+            paramMap.put("cityId", cityId);
+        } else {
+            sql = "select * from college where valid = 1";
+        }
 
-        String sql = "select * from college where city_id=:cityId and valid = 1";
-        Map<String, Object> paramMap = Maps.newHashMap();
-        paramMap.put("cityId", cityId);
         return this.getNamedJdbcTemplate().query(sql, paramMap, new BeanPropertyRowMapper<College>(College.class));
 
     }
@@ -38,7 +44,7 @@ public class CollegeDaoImpl extends SpringCommonDao implements CollegeDao {
     public List<College> getCollegeByAreaId(Long areaId) {
 
         String sql =
-            "select * from college join city on city.id = college.city_id where city.area_id = :areaId and college.valid = 1 and city.valid = 1";
+            "select col.name,col.id,col.short_name from college col join city on city.id = col.city_id where city.area_id = :areaId and col.valid = 1 and city.valid = 1";
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("areaId", areaId);
         return this.getNamedJdbcTemplate().query(sql, paramMap, new BeanPropertyRowMapper<College>(College.class));

@@ -18,4 +18,6 @@ public interface CityDao {
     Long getCityIdByCityName(String name);
 
     Long getAreaIdByCityId(Long cityId);
+
+    City getDefaultCity(Long areaId);
 }

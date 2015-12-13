@@ -35,8 +35,7 @@ function collegeSelected(collegeID)
 				items_per_page:data.items_per_page,
 				prev_text:'上一页',
 				next_text:'下一页',
-				num_edge_entries:1,
-				num_display_entries: 1,			
+				num_edge_entries:1,				
 				callback: function(page,jq){
 					//console.log(page+','+jq);
 					displayXJH(page,curXJHData);
@@ -180,23 +179,25 @@ function areaSelected(curAreaObj)
 
 $(function(){
 	//ip = "116.211.225.2";
-	getAreaAndCity(ip,function(area,city){
-		curAreaObj = area;
-		curCityObj = city;
+	//getAreaAndCity(ip,function(area,city){
+		//curAreaObj = area;
+		//curCityObj = city;
 		//alert('area:'+curAreaObj.name);
 		//alert('area:'+curCityObj.name);
-		init();
+		//init();
 		 
-	})
+	//})
+  
+  init();
 	
 })
 function init(){
 	  
 		areas.push({id:0,name:'全部'});
 		
-		areaSelected(curAreaObj);
+		//areaSelected(curAreaObj);
 	
-		$('.allAreaList').empty();
+		//$('.allAreaList').empty();
 		
 		$(areas).each(function(i,area)
 		{
@@ -207,7 +208,7 @@ function init(){
 			var areaName = $(this).text();
 			var areaID = $(this).attr("rel");
 			$(".allArea").hide();
-			if(model.name == 'xjh'||model.name == 'xyzp')
+			if(model.name == 'xjh' || model.name == 'xyzp')
 			{
 				 
 				$(areas).each(function(i,area)
@@ -224,12 +225,12 @@ function init(){
 					curAreaObj = null;
 				}
 				
-				areaSelected(curAreaObj);	
+				//areaSelected(curAreaObj);
 			}
 		});
 		
 		//areaSelected(areas[0]);
-
+    /*
 		$(".curArea").click(function(){
 		  $(".allArea").toggle();
 		})
@@ -237,7 +238,7 @@ function init(){
 			  if (event.target.className != "curArea"){
 				  $(".allArea").hide();
 			  }
-		});
+		});*/
 		$(".allArea").click(function(e) {    
 			e = e || window.event;
 			if(document.all){
@@ -253,7 +254,7 @@ function init(){
 		
 		//折叠展开
 		
-		if(model.name == 'xjh'|| model.name == 'xyzp')
+		if(model.name == 'xjh' || model.name == 'xyzp')
 		{
 			//$("span.righttop").click(expand);
 			$("span.righttop").parent().click(expand);
@@ -265,8 +266,16 @@ function init(){
 function expand()
 {
 	var obj = $("span.righttop");
-	$(".productFilter dl").toggle();
-	 
+	if(obj.text().indexOf('展开')>0) {
+		obj.text('点击折叠 ▼'); 
+		$(".productFilter dl").show();
+	}
+	else{
+		obj.text('点击展开 ▲');
+		if($('#citys').children().length>0)
+			$(".productFilter dl").hide();
+		else $('#colleges').parent().hide();	
+	}	
 }
 
 
@@ -275,16 +284,8 @@ function expand()
 	 	$('#content_tbl tr:has(td)').remove();
 		$(data.rows).each(function(i,row)
 		{
-			if(model.name == 'xjh')
-			{
-				var tr = "<tr><td class='myNm'><a id='"+row.id+"' title='"+row.title+"'>"+SHORT(row.title,20)+"</a></td><td>"+SHORT(row.hold_time,10)+"</td><td>"+SHORT(row.address,10)+"</td></tr>"
-				$('#content_tbl').append(tr);
-			}else if(model.name == 'xyzp')
-			{
-				var tr = "<tr><td class='myNm'><a id='"+row.id+"' title='"+row.title+"'>"+SHORT(row.title,20)+"</a></td><td>"+SHORT(row.add_time,10)+"</td><td>"+SHORT(row.address,10)+"</td></tr>"
-				$('#content_tbl').append(tr);
-			}
-		
+			var tr = "<tr><td class='myNm'><a id='"+row.id+"' title='"+row.title+"'>"+SHORT(row.title,20)+"</a></td><td>"+SHORT(row.hold_time,20)+"</td><td>"+SHORT(row.address,10)+"</td><td>"+SHORT(row.add_time,14)+"</td><td>"+SHORT(parseInt(row.click),4)+"</td></tr>"
+			$('#content_tbl').append(tr);
 		});
 		$("#content_tbl tr a").addClass('titleAnchor');
 		$("#content_tbl tr a").attr('target', '_blank');

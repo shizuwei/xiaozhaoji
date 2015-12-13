@@ -7,6 +7,7 @@ package com.xiaozhaoji.dao.impl;
 import com.google.common.collect.Maps;
 import com.xiaozhaoji.dao.TalkDao;
 import com.xiaozhaoji.dao.po.Talk;
+import com.xiaozhaoji.service.dto.request.PageDto;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class TalkDaoImpl extends SpringCommonDao implements TalkDao {
 
@@ -37,16 +41,25 @@ public class TalkDaoImpl extends SpringCommonDao implements TalkDao {
     }
 
     @Override
-    public List<Talk> list(Long collegeId, Date startTime, Date endTime, int start, int count) {
+    public List<Talk> list(Long collegeId, Date startTime, Date endTime, PageDto page) {
+
+        String countSql =
+            "select count(id) from talk where college_id = :collegeId and add_time >= :startTime and add_time < :endTime";
 
         String sql =
             "select * from talk where college_id = :collegeId and add_time >= :startTime and add_time < :endTime order by add_time desc limit :start,:count";
         Map<String, Object> paramMap = Maps.newHashMap();
-        paramMap.put("start", start);
-        paramMap.put("count", count);
+
         paramMap.put("startTime", startTime);
         paramMap.put("endTime", endTime);
         paramMap.put("collegeId", collegeId);
+
+        Integer cnt = this.getNamedJdbcTemplate().queryForObject(countSql, paramMap, Integer.class);
+        log.debug(" cnt = {}", cnt);
+        page.setTotalElementCount(cnt);
+        log.debug("limit {},{}", page.getFirstNumber(), page.getCurPageElementCount());
+        paramMap.put("start", page.getFirstNumber());
+        paramMap.put("count", page.getCurPageElementCount());
         return this.getNamedJdbcTemplate().query(sql, paramMap, new BeanPropertyRowMapper<Talk>(Talk.class));
 
     }

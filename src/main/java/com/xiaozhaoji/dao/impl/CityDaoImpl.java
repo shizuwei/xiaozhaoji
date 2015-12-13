@@ -66,4 +66,14 @@ public class CityDaoImpl extends SpringCommonDao implements CityDao {
         return this.getNamedJdbcTemplate().queryForObject(sql, paramMap, Long.class);
 
     }
+
+    @Override
+    public City getDefaultCity(Long areaId) {
+
+        String sql = "select * from city where area_id = :areaId order by order asc limit 1";
+        Map<String, Object> paramMap = Maps.newHashMap();
+        paramMap.put("areaId", areaId);
+        return this.getNamedJdbcTemplate().queryForObject(sql, paramMap, new BeanPropertyRowMapper<City>(City.class));
+
+    }
 }

@@ -14,6 +14,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class TalkServiceImpl implements TalkService {
     @Resource
@@ -29,15 +32,18 @@ public class TalkServiceImpl implements TalkService {
     @Override
     public List<TalkDto> list(Long collegeId, PageDto pageDto) {
 
-        return pos2dtos(talkDao.list(collegeId, DateUtils.getTodayStartTime(), DateUtils.getTodayStartTime(30),
-            pageDto.getFirstNumber(), pageDto.getCurPageElementCount()));
+        List<Talk> talks =
+            talkDao.list(collegeId, DateUtils.getTodayStartTime(), DateUtils.getTodayStartTime(30), pageDto);
+        // log.debug("talks = {}", talks);
+        return pos2dtos(talks);
 
     }
 
     private TalkDto po2dto(Talk po) {
         TalkDto dto = new TalkDto();
         dto.setCollegeId(po.getCollegeId());
-        dto.setCilck(po.getCilck());
+        dto.setClick(po.getClick());
+        dto.setTitle(po.getTitle());
         dto.setAddTime(po.getAddTime());
         dto.setAddress(po.getAddress());
         dto.setContext(po.getContext());

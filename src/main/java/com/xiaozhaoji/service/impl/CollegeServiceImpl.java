@@ -12,6 +12,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class CollegeServiceImpl implements CollegeService {
 
@@ -43,6 +46,7 @@ public class CollegeServiceImpl implements CollegeService {
 
         List<CollegeDto> dtos = Lists.newArrayList();
         List<College> colleges = this.collegeDao.getCollegeByAreaId(areaId);
+        log.debug("colleges = {},areaid={}", colleges, areaId);
         for (College college : colleges) {
             dtos.add(Po2Dto(college));
         }

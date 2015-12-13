@@ -59,13 +59,13 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public List<AreaDto> getAll(Long id, boolean loadCites) {
+    public List<AreaDto> getAll(boolean loadCites) {
         List<AreaDto> dtos = Pos2Dtos(this.areaDao.getAll());
         if (loadCites) {
             for (AreaDto dto : dtos) {
-                dto.setCities(this.cityService.getCityByAreaId(id));
+                dto.setCities(this.cityService.getCityByAreaId(dto.getId()));
             }
         }
-        return Pos2Dtos(this.areaDao.getAll());
+        return dtos;
     }
 }

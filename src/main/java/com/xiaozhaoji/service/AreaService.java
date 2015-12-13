@@ -10,6 +10,6 @@ public interface AreaService {
 
     AreaDto getAreaById(Long id, boolean loadCites);
 
-    List<AreaDto> getAll(Long id, boolean loadCites);
+    List<AreaDto> getAll(boolean loadCites);
 
 }

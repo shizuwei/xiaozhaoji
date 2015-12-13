@@ -1,8 +1,6 @@
 package com.xiaozhaoji.dao.po;
 
 import com.xiaozhaoji.dao.AreaDao;
-import com.xiaozhaoji.dao.CityDao;
-import com.xiaozhaoji.dao.CollegeDao;
 
 public class WebContext {
     public static final String CTX_NAME = "web-ctx";
@@ -32,11 +30,8 @@ public class WebContext {
     }
 
     public void setCityId(Long cityId) {
-        if (cityId != null) {
-            this.cityId = cityId;
-        } else {
-            this.cityId = CityDao.DEFAULT_CITY_ID;
-        }
+        this.cityId = cityId;
+
     }
 
     public Long getCollegeId() {
@@ -45,10 +40,12 @@ public class WebContext {
     }
 
     public void setCollegeId(Long collegeId) {
-        if (collegeId != null) {
-            this.collegeId = collegeId;
-        } else {
-            this.collegeId = CollegeDao.DEFULT_COLLEGE_ID;
-        }
+        this.collegeId = collegeId;
+
+    }
+
+    @Override
+    public String toString() {
+        return "area:" + this.areaId + "city:" + this.cityId + "college:" + this.collegeId;
     }
 }

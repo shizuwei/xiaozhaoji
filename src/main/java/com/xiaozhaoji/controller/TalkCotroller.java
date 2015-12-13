@@ -24,9 +24,12 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
-@RequestMapping("/")
-public class MainCotroller {
+@RequestMapping("talk/")
+public class TalkCotroller {
 
     @Resource
     private AreaService areaService;
@@ -37,7 +40,7 @@ public class MainCotroller {
     @Resource
     private TalkService talkService;
 
-    @RequestMapping(value = "talk.do", method = RequestMethod.GET)
+    @RequestMapping(value = "index.do", method = RequestMethod.GET)
     public ModelAndView index(@ModelAttribute TalkRequestDto talkRequestDto, HttpServletRequest request,
         HttpServletResponse response) {
 
@@ -45,15 +48,22 @@ public class MainCotroller {
 
         // 地区的城市列表
         Map<String, Object> model = Maps.newHashMap();
-        model.put("area", areaService.getAreaById(ctx.getAreaId(), true));
+        model.put("areas", areaService.getAll(false));
+        model.put("curArea", areaService.getAreaById(ctx.getAreaId(), true));
+        if (ctx.getCityId() != null) {
+            model.put("colleges", collegeService.getCollegeByCityId(ctx.getCityId()));
+        } else {
+            model.put("colleges", collegeService.getCollegeByAreaId(ctx.getAreaId()));
+        }
 
         // 学校的宣讲会列表
         PageDto page = new PageDto();
         page.setCurPage(talkRequestDto.getPage());
         List<TalkDto> talkList = talkService.list(ctx.getCityId(), page);
+        // log.debug("list = {}", talkList);
         model.put("talks", talkList);
 
-        return new ModelAndView(new InternalResourceView("/index.jsp"), model);
+        return new ModelAndView(new InternalResourceView("/default/talk.jsp"), model);
     }
 
 }

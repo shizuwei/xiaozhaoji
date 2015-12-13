@@ -114,7 +114,7 @@ public class WebFilter implements Filter {
                 }
             }
 
-            if (ctx.getAreaId() == null || ctx.getCityId() == null) {
+            if (ctx.getAreaId() == null) {
                 // cookie中没有，使用ip通过httpClient来获取
                 String clientIp = NetworkUtil.getIpAddress(req);
                 log.debug("clientIp = {}", clientIp);
@@ -134,11 +134,13 @@ public class WebFilter implements Filter {
                 setCookie(res, WebContext.COOKIE_AREA_ID_NAME, ctx.getAreaId().toString());
                 setCookie(res, WebContext.COOKIE_CITY_ID_NAME, ctx.getCityId().toString());
             }
+            log.info("ctx = {}", ctx);
             session.setAttribute(WebContext.CTX_NAME, ctx);
         } else {
             if (tryGetIdFromParameter(ctx, req)) {
                 setCookie(res, WebContext.COOKIE_AREA_ID_NAME, ctx.getAreaId().toString());
-                setCookie(res, WebContext.COOKIE_CITY_ID_NAME, ctx.getCityId().toString());
+                setCookie(res, WebContext.COOKIE_CITY_ID_NAME,
+                    ctx.getCityId() != null ? ctx.getCityId().toString() : null);
             }
         }
         chain.doFilter(request, response);
@@ -154,19 +156,33 @@ public class WebFilter implements Filter {
     private boolean tryGetIdFromParameter(WebContext ctx, HttpServletRequest req) {
 
         try {
+
             if (StringUtils.isNotBlank(req.getParameter("collegeId"))) {
                 ctx.setCollegeId(Long.parseLong(req.getParameter("collegeId")));
-                if (StringUtils.isNotBlank(req.getParameter("cityId"))) {
-                    ctx.setCityId(Long.parseLong(req.getParameter("cityId")));
-                } else {
-                    ctx.setCityId(this.collegeDao.getCityIdByCollegeId(ctx.getCollegeId()));
-                }
-                if (StringUtils.isNotBlank(req.getParameter("areaId"))) {
-                    ctx.setAreaId(Long.parseLong(req.getParameter("areaId")));
-                } else {
-                    ctx.setAreaId(this.cityDao.getAreaIdByCityId(ctx.getCityId()));
+            }
+
+            if (StringUtils.isNotBlank(req.getParameter("cityId"))) {
+                ctx.setCityId(Long.parseLong(req.getParameter("cityId")));
+            } else if (ctx.getCollegeId() != null) {
+                ctx.setCityId(this.collegeDao.getCityIdByCollegeId(ctx.getCollegeId()));
+            }
+
+            if (StringUtils.isNotBlank(req.getParameter("areaId"))) {
+                Long areaId = Long.parseLong(req.getParameter("areaId"));
+                if (ctx.getAreaId() != areaId) {
+                    ctx.setAreaId(areaId);
+                    ctx.setCityId(null);
                 }
 
+            } else if (ctx.getCityId() != null) {
+                ctx.setAreaId(this.cityDao.getAreaIdByCityId(ctx.getCityId()));
+            } else {
+                ctx.setAreaId(AreaDao.DEFAULT_AREA_ID);
+                // ctx.setCityId(this.cityDao.getDefaultCity(ctx.getAreaId()).getId());
+            }
+
+            log.info("ctx = {}", ctx);
+            if (ctx.getAreaId() != null) {
                 return true;
             }
         } catch (Exception e) {

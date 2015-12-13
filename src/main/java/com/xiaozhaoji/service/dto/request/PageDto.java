@@ -5,7 +5,6 @@ public class PageDto {
      * 页数从1开始
      */
     private int curPage;
-    private int totalPages;
 
     /**
      * 条目数
@@ -42,12 +41,8 @@ public class PageDto {
 
     public int getTotalPages() {
 
-        return totalPages;
-    }
-
-    public void setTotalPages(int totalPages) {
-
-        this.totalPages = totalPages;
+        return this.getTotalElementCount() / DEFAULT_PAGE_ELEMENT_CNT
+            + (this.getTotalElementCount() % DEFAULT_PAGE_ELEMENT_CNT != 0 ? 1 : 0);
     }
 
     /**
@@ -57,7 +52,7 @@ public class PageDto {
      */
     public int getCurPageElementCount() {
 
-        return totalPages - getFirstNumber();
+        return getTotalElementCount() - getFirstNumber();
     }
 
     public int getTotalElementCount() {

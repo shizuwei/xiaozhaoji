@@ -14,5 +14,6 @@ public class Talk {
     private Date addTime;
     private String srcUrl;
     private String srcName;
-    private Integer cilck;
+    private Integer click;
+    private String title;
 }
