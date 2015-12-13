@@ -73,16 +73,11 @@
 		<!-- Another sample, using keys to authenticate. <server> <id>siteServer</id> 
 			<privateKey>/path/to/private/key</privateKey> <passphrase>optional; leave 
 			empty if not used.</passphrase> </server> -->
-		<!-- <server>
-			<id>Baijia_Release</id>
-			<username>deployment</username>
-			<password>baijiahulian</password>
-		</server>
 		<server>
-			<id>Baijia_Snapshot</id>
-			<username>deployment</username>
-			<password>baijiahulian</password>
-		</server>-->
+			<id>tomcat7</id>
+			<username>admin</username>
+			<password>password</password>
+		</server>
 	</servers>
 
 	<!-- mirrors | This is a list of mirrors to be used in downloading artifacts 
@@ -106,21 +101,18 @@
 			<mirrorOf>central</mirrorOf>
 			<url>http://maven.oschina.net/content/groups/public/</url>
 		</mirror>
-        <mirror>
-            <id>osc</id>
-            <mirrorOf>central</mirrorOf>
-            <url>http://maven.oschina.net/content/groups/public/</url>
-        </mirror>
+		<mirror>
+			<id>osc</id>
+			<mirrorOf>central</mirrorOf>
+			<url>http://maven.oschina.net/content/groups/public/</url>
+		</mirror>
 		<mirror>
 			<id>osc_thirdparty</id>
 			<mirrorOf>thirdparty</mirrorOf>
 			<url>http://maven.oschina.net/content/repositories/thirdparty/</url>
 		</mirror>
-		<!--<mirror>
-			<id>baijia</id>
-			<mirrorOf>!central,!thirdparty</mirrorOf>
-			<url>http://nexus.genshuixue.com/nexus/content/groups/public</url>
-		</mirror> -->
+		<!--<mirror> <id>baijia</id> <mirrorOf>!central,!thirdparty</mirrorOf> 
+			<url>http://nexus.genshuixue.com/nexus/content/groups/public</url> </mirror> -->
 
 	</mirrors>
 
@@ -160,8 +152,8 @@
 		<profile>
 			<id>default</id>
 			<repositories>
-			 
-				
+
+
 				<repository>
 					<id>public</id>
 					<url>http://central.maven.org/maven2</url>
