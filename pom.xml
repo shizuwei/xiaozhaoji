@@ -24,11 +24,10 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.1</version>
 				<configuration>
-					<port>9090</port>
-					<path>/mgr</path>
-					<uriEncoding>UTF-8</uriEncoding>
-					<finalName>mgr</finalName>
-					<server>tomcat7</server>
+					<!-- 注意此处的url -->
+					<url>http://xiaozhaoji.com:8080/manager</url>
+					<server>tomcat7</server> <!-- 此处的名字必须和setting.xml中配置的ID一致 -->
+					<path>/xiaozhaoji</path> <!-- 此处的名字是项目发布的工程名 -->
 				</configuration>
 			</plugin>
 		</plugins>
@@ -207,10 +206,10 @@
 			<version>2.6.4</version>
 		</dependency>
 		<dependency>
-	<groupId>com.fasterxml.jackson.core</groupId>
-	<artifactId>jackson-annotations</artifactId>
-	<version>2.6.4</version>
-</dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.6.4</version>
+		</dependency>
 
 	</dependencies>
 
