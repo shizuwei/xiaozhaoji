@@ -152,7 +152,6 @@
 		<profile>
 			<id>default</id>
 			<repositories>
-
 				<repository>
 					<id>public</id>
 					<url>http://central.maven.org/maven2</url>
@@ -160,14 +159,11 @@
 						<enabled>true</enabled>
 					</releases>
 				</repository>
-
 				<repository>
 					<id>repo-mirror</id>
 					<url>http://maven.net.cn/content/groups/public/</url>
 				</repository>
-
 			</repositories>
-
 			<pluginRepositories>
 				<pluginRepository>
 					<id>plugin-repo-mirror</id>

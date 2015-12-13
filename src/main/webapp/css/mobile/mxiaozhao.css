@@ -1,0 +1,86 @@
+blockquote,body,button,dd,dl,dt,fieldset,form,h1,h2,h3,h4,h5,h6,hr,input,legend,li,ol,p,pre,td,textarea,th,ul {margin:0;padding:0}
+body,button,input,select,textarea {font:14px/1.75 \5FAE\8F6F\96C5\9ED1,\5b8b\4f53,sans-serif,tahoma,arial,'Hiragino Sans GB'; color: #6f6f6f}
+h1,h2,h3,h4,h5,h6 {font-size:100%}
+address,cite,dfn,em,var {font-style:normal}
+code,kbd,pre,samp {font-family:courier new,courier,monospace}
+ol,ul{list-style:none}
+img{display: block;border: 0 none;}
+input:focus,select:focus{outline: 0 none;}
+a {color:#333;text-decoration:none;outline: 0 none;}
+a:hover {color:#e65;text-decoration: none;}
+body{background: #f4f4f4;}
+.clear:after,.productFilter dl:after{content:'\20';display:block;height:0;clear:both}
+.righttop{position:absolute;right:20px;top:0}
+span.righttop:hover{cursor:pointer}
+.clear,.productFilter dl{*zoom:1}
+.w1000{width:1000px;margin-left:auto; margin-right: auto;}
+.tc{ text-align: center;}
+.red{ color: #f00;}
+.mb16{ margin-bottom: 16px;}
+.mb20{ margin-bottom: 20px;}
+.bar{background:#f0f0f0;border-bottom: 1px solid #ddd; box-shadow:0 1px 2px rgba(9,2,4,0.10);padding:5px 10px;height: 25px; z-index: 999; position: relative;}
+.logo{width:75px; height: 25px;line-height: 999em; overflow: hidden;  float:left;  }
+.logo img{width: 75px;}
+.areaTab{ float: right; position: relative;}
+#wait{display:none;}
+.curArea{display: block; color: #819eb4; font-size: 16px; line-height: 24px; position: relative;  cursor: pointer;}
+.allArea{ z-index:1000; position: absolute; right:-10px; top:31px; height: 200px; display: none; width: 350%;}
+.allAreaBg{background: #555;filter:alpha(opacity=90);opacity:0.9; position: absolute; top:0; left:0;width:100%; height: 110px;}
+.allAreaList{position: absolute; z-index: 2; top:5px; left:0;overflow: hidden;}
+.allAreaList li{ font-size: 12px; float: left;  padding: 0 8px; margin:0 0 5px 0;color: #fff; cursor: pointer;}
+
+.nav{height: 30px; line-height: 30px; width: 100%;text-align: center; background:#23bab5;margin-bottom: 10px; }
+.nav li{float: left;}
+.nav li a{padding:0 20px; display: block;font-size: 14px; color: #fff;}
+.nav li a:hover,.nav li.cur a{color: #fff;background: #1b8f8b}
+/*课程选择*/
+.productFilter{ border:#ddd 1px solid; margin: 0 10px 20px; border-bottom: 0 none;box-shadow:0 1px 2px rgba(9,2,4,0.25);background: #fff}
+.filterTitle{position:relative;left:0;background: #f7f9fc;border-bottom:#ddd 1px solid; height: 42px; line-height: 42px; padding-left: 20px;}
+.owz{ color: #ff8331;}
+.productFilter dl{ border-bottom: #ddd 1px solid; padding:10px 10px 5px 10px; line-height: 22px; font-size: 12px; }
+.productFilter dt{ float: left; color: #999;padding-right: 5px;}
+.productFilter dd{ float: left;  }
+.productFilter dd span{padding:2px 10px;  float: left; height: 16px; line-height: 16px; cursor: pointer; margin-bottom: 5px; position: relative;}
+.productFilter dd span:hover i{color: #f60;}
+.productFilter dd span:hover{ color: #f60}
+.productFilter dd span.select{ background-color: #ff8331; color: #fff;border:#b4581b 0px solid;}
+.productFilter dd span.select i{ display: block;}
+/*主体*/
+.main{margin:0 10px;}
+.myLxtable{width:100%; border-left:#ddd 1px solid; border-top:#ddd 1px solid;  margin-bottom: 2px; background: #fff;box-shadow:0 1px 2px rgba(9,2,4,0.25);}
+.myLxtable th,.myLxtable td{height:30px;padding:7px 2px 7px 2px;border-bottom:#ddd 1px solid;border-right:#ddd 1px solid;text-align: center; font-size: 12px;}
+.myLxtable th{background: #f9f9f9; font-size: 14px; }
+.myLxtable td.myNm,.myLxtable th.myNm{ text-align: left; padding:7px;}
+.titleAnchor{cursor:pointer}
+/*翻页样式*/
+.tPage{margin:20px auto;  text-align:center;}
+.tPage a,.tPage b{border: 1px solid #e5e5e5;display: inline-block;line-height:14px;margin: 0 1px;padding: 4px 8px;vertical-align: middle; height:14px; color: #5f5f5f; background: #fff}
+.tPage b,.tPage a:hover{ background:#23bab5; border:#23bab5 1px solid; color:#fff;}
+.fLink{ text-align: left;  margin: 0 10px 10px;font-size: 12px;}
+.fLink a{margin-right:10px; display: inline-block;}
+.fLink strong{ color: #23bab5;}
+/*页尾*/
+.footer{width:100%; text-align: center;padding:15px 0; background: #23bab5; color: #fff; font-size: 12px;}
+.footer p{ padding:  2px 0}
+.footer a{ color: #fff;}
+.footer a:hover{ color: #f0f0f0}
+.sBox{padding: 10px;}
+.sBox h3{font-weight: normal;  color: #666;font-size: 10px;}
+#content0{
+	position: relative;
+	overflow:hidden;
+}
+
+#content{
+	border-top:#ddd 1px solid; margin-top: 5px; padding-top: 5px;
+	min-height:500px;
+	position: relative;
+	overflow:hidden;
+}
+div.content{
+	min-height:320px;
+	position: relative;
+	overflow:hidden;
+}
+
+

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.collect.Maps;
 import com.xiaozhaoji.dao.AreaDao;
 import com.xiaozhaoji.dao.CityDao;
+import com.xiaozhaoji.dao.CollegeDao;
 import com.xiaozhaoji.dao.po.WebContext;
 import com.xiaozhaoji.utils.HttpClientUtils;
 import com.xiaozhaoji.utils.JacksonUtil;
@@ -37,7 +38,18 @@ public class WebFilter implements Filter {
 
     private CityDao cityDao;
     private AreaDao areaDao;
+    private CollegeDao collegeDao;
     private final static String IP_RESOLVING_URL = "http://ip.taobao.com/service/getIpInfo.php";
+
+    public CollegeDao getCollegeDao() {
+
+        return collegeDao;
+    }
+
+    public void setCollegeDao(CollegeDao collegeDao) {
+
+        this.collegeDao = collegeDao;
+    }
 
     public CityDao getCityDao() {
 
@@ -87,16 +99,19 @@ public class WebFilter implements Filter {
         if (ctx == null) {
             ctx = new WebContext();
             log.info("session id = {}", session.getId());
-            // 先从cookie获取
-            Cookie areaCookie = getCookieByName(req.getCookies(), WebContext.COOKIE_AREA_ID_NAME);
-            Cookie cityCookie = getCookieByName(req.getCookies(), WebContext.COOKIE_CITY_ID_NAME);
 
-            if (areaCookie != null && StringUtils.isNumeric(areaCookie.getValue())) {
-                ctx.setAreaId(Long.parseLong(areaCookie.getValue()));
-            }
+            if (!tryGetIdFromParameter(ctx, req)) {
+                // 先从cookie获取
+                Cookie areaCookie = getCookieByName(req.getCookies(), WebContext.COOKIE_AREA_ID_NAME);
+                Cookie cityCookie = getCookieByName(req.getCookies(), WebContext.COOKIE_CITY_ID_NAME);
 
-            if (cityCookie != null && StringUtils.isNumeric(cityCookie.getValue())) {
-                ctx.setCityId(Long.parseLong(cityCookie.getValue()));
+                if (areaCookie != null && StringUtils.isNumeric(areaCookie.getValue())) {
+                    ctx.setAreaId(Long.parseLong(areaCookie.getValue()));
+                }
+
+                if (cityCookie != null && StringUtils.isNumeric(cityCookie.getValue())) {
+                    ctx.setCityId(Long.parseLong(cityCookie.getValue()));
+                }
             }
 
             if (ctx.getAreaId() == null || ctx.getCityId() == null) {
@@ -116,13 +131,49 @@ public class WebFilter implements Filter {
                     ctx.setCityId(CityDao.DEFAULT_CITY_ID);
                 }
 
-                session.setAttribute(WebContext.COOKIE_AREA_ID_NAME, ctx.getAreaId());
-                session.setAttribute(WebContext.COOKIE_CITY_ID_NAME, ctx.getCityId());
+                setCookie(res, WebContext.COOKIE_AREA_ID_NAME, ctx.getAreaId().toString());
+                setCookie(res, WebContext.COOKIE_CITY_ID_NAME, ctx.getCityId().toString());
             }
             session.setAttribute(WebContext.CTX_NAME, ctx);
-
+        } else {
+            if (tryGetIdFromParameter(ctx, req)) {
+                setCookie(res, WebContext.COOKIE_AREA_ID_NAME, ctx.getAreaId().toString());
+                setCookie(res, WebContext.COOKIE_CITY_ID_NAME, ctx.getCityId().toString());
+            }
         }
         chain.doFilter(request, response);
+    }
+
+    private static void setCookie(HttpServletResponse res, String name, String value) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(3600);
+        cookie.setPath("/");
+        res.addCookie(cookie);
+    }
+
+    private boolean tryGetIdFromParameter(WebContext ctx, HttpServletRequest req) {
+
+        try {
+            if (StringUtils.isNotBlank(req.getParameter("collegeId"))) {
+                ctx.setCollegeId(Long.parseLong(req.getParameter("collegeId")));
+                if (StringUtils.isNotBlank(req.getParameter("cityId"))) {
+                    ctx.setCityId(Long.parseLong(req.getParameter("cityId")));
+                } else {
+                    ctx.setCityId(this.collegeDao.getCityIdByCollegeId(ctx.getCollegeId()));
+                }
+                if (StringUtils.isNotBlank(req.getParameter("areaId"))) {
+                    ctx.setAreaId(Long.parseLong(req.getParameter("areaId")));
+                } else {
+                    ctx.setAreaId(this.cityDao.getAreaIdByCityId(ctx.getCityId()));
+                }
+
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+        return false;
     }
 
     private static Cookie getCookieByName(Cookie[] cookies, String name) {

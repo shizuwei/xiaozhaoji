@@ -11,5 +11,9 @@
 	<c:forEach var='city' items="${area.cities}">
 		<c:out value="${city.name}" escapeXml="true" default="默认值" />
 	</c:forEach>
+	
+	<c:forEach var='talk' items="${talks}">
+		<c:out value="${talk.title}" escapeXml="true" default="默认值" />
+	</c:forEach>
 </body>
 </html>

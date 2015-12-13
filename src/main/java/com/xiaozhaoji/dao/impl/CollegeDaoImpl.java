@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-@Repository
+@Repository(value = "collegeDao")
 public class CollegeDaoImpl extends SpringCommonDao implements CollegeDao {
 
     @Override
@@ -42,6 +42,16 @@ public class CollegeDaoImpl extends SpringCommonDao implements CollegeDao {
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("areaId", areaId);
         return this.getNamedJdbcTemplate().query(sql, paramMap, new BeanPropertyRowMapper<College>(College.class));
+
+    }
+
+    @Override
+    public Long getCityIdByCollegeId(Long id) {
+
+        String sql = "select city_id from college where id = :id ";
+        Map<String, Object> paramMap = Maps.newHashMap();
+        paramMap.put("id", id);
+        return this.getNamedJdbcTemplate().queryForObject(sql, paramMap, Long.class);
 
     }
 }

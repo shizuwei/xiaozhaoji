@@ -1,0 +1,38 @@
+<!-- begin talk-list -->
+<div id="talk-list">
+	<div id="pager">
+	{$page}
+	</div>
+	<table id="talk-list-table">
+		<thead>
+		  <tr>
+			<th  width="30%">公司标题</th>
+			<th  width="20%">举办时间</th>
+			<th  width="30%">举办地点</th>
+			<th  width="10%">发布时间</th>
+			<th  width="5%">打开</th>
+			<th  width="5%">点击量</th>
+			 
+		  </tr>
+		</thead>
+		<tbody>
+	
+		  <volist name="talk_list" id="vo1">
+			  <tr>
+			    <td>{$vo1.title}</td>
+			    <td>{$vo1.hold_time}</td>
+			    <td>{$vo1.address}</td>
+			    <td>{$vo1.add_time|mk_time_str}</td>
+			    <td ><a href="{:U('click?id='.$vo1['id'])}" target="_blank">打开</a> </td>
+			    <td>{$vo1.click}</td>  
+			  </tr>
+   			</volist>
+		  
+		  </tbody>
+	</table>
+	<div id="pager">
+	{$page}
+	</div>
+	
+</div>
+<!-- begin talk-list -->	

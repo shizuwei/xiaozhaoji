@@ -1,0 +1,9 @@
+<!-- begin collge-picker -->
+<div id="college-picker" >
+
+			<volist name="cols" id="co">
+				<a href="{:U('index',array('areaid'=>cookie('areaid'),'cityid'=>cookie('cityid'),'colid'=>$co['id']))}" class="{$co.class}">{$co.name|default="没有这个城市的学校信息！"}</a>
+			</volist>
+			<div style="clear:both"></div>
+</div>
+<!-- end college-picker -->

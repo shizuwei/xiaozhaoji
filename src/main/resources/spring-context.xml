@@ -24,6 +24,9 @@
 	<context:component-scan base-package="com.xiaozhaoji.service" />
 
 	<bean id="webFilter" class="com.xiaozhaoji.filter.WebFilter">
+		<property name="collegeDao">
+			<ref bean="collegeDao" />
+		</property>
 		<property name="cityDao">
 			<ref bean="cityDao" />
 		</property>
