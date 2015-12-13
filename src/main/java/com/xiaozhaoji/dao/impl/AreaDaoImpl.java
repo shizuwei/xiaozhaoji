@@ -25,7 +25,7 @@ public class AreaDaoImpl extends SpringCommonDao implements AreaDao {
 
     @Override
     public Area getAreaById(@NonNull Long id) {
-        String sql = "select * from area where id=:id";
+        String sql = "select * from area where id=:id and valid = 1";
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("id", id);
         return this.getNamedJdbcTemplate().queryForObject(sql, paramMap, new BeanPropertyRowMapper<Area>(Area.class));
@@ -33,7 +33,8 @@ public class AreaDaoImpl extends SpringCommonDao implements AreaDao {
 
     @Override
     public List<Area> getAll() {
-        return this.getNamedJdbcTemplate().query("select * from area", new BeanPropertyRowMapper<Area>(Area.class));
+        return this.getNamedJdbcTemplate().query("select * from area where valid = 1",
+            new BeanPropertyRowMapper<Area>(Area.class));
     }
 
     @Override
@@ -42,7 +43,7 @@ public class AreaDaoImpl extends SpringCommonDao implements AreaDao {
         if (StringUtils.isEmpty(name)) {
             return DEFAULT_AREA_ID;
         }
-        String sql = "select id from area where name like :name";
+        String sql = "select id from area where name like :name and valid = 1";
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("name", name + '%');
         List<Long> list = this.getNamedJdbcTemplate().queryForList(sql, paramMap, Long.class);

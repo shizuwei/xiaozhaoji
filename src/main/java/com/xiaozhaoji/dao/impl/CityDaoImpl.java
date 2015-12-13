@@ -25,7 +25,7 @@ public class CityDaoImpl extends SpringCommonDao implements CityDao {
     @Override
     public City getCityById(Long id) {
 
-        String sql = "select * from city where id=:id";
+        String sql = "select * from city where id=:id  and valid = 1";
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("id", id);
         return this.getNamedJdbcTemplate().queryForObject(sql, paramMap, new BeanPropertyRowMapper<City>(City.class));
@@ -35,7 +35,7 @@ public class CityDaoImpl extends SpringCommonDao implements CityDao {
     @Override
     public List<City> getCityByAreaId(Long areaId) {
 
-        String sql = "select * from city where area_id=:areaId";
+        String sql = "select * from city where area_id=:areaId and valid = 1";
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("areaId", areaId);
         return this.getNamedJdbcTemplate().query(sql, paramMap, new BeanPropertyRowMapper<City>(City.class));
@@ -46,7 +46,7 @@ public class CityDaoImpl extends SpringCommonDao implements CityDao {
         if (StringUtils.isEmpty(name)) {
             return DEFAULT_CITY_ID;
         }
-        String sql = "select id from city where name like :name";
+        String sql = "select id from city where name like :name and valid = 1";
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("name", name + '%');
         List<Long> list = this.getNamedJdbcTemplate().queryForList(sql, paramMap, Long.class);
