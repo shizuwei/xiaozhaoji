@@ -47,7 +47,7 @@ public class TalkDaoImpl extends SpringCommonDao implements TalkDao {
             "select count(id) from talk where college_id = :collegeId and add_time >= :startTime and add_time < :endTime";
 
         String sql =
-            "select * from talk where college_id = :collegeId and add_time >= :startTime and add_time < :endTime order by add_time desc limit :start,:count";
+            "select id,college_id,title,hold_time,address,add_time,src_url,src_name,click from talk where college_id = :collegeId and add_time >= :startTime and add_time < :endTime order by add_time desc limit :start,:count";
         Map<String, Object> paramMap = Maps.newHashMap();
 
         paramMap.put("startTime", startTime);

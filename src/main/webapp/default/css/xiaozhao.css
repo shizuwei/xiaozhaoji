@@ -44,6 +44,8 @@ line-height:13px;
 .allAreaBg{background: #555;filter:alpha(opacity=90);opacity:0.9; position: absolute; bottom:0; left:0;width: 400px; height: 126px;}
 .allAreaList{position: absolute; z-index: 2; top:20px; left:6px;overflow: hidden;}
 .allAreaList li{ font-size: 12px; float: left; background-position: -399px 5px; padding: 0 12px 0 13px; margin:0 0 5px -1px;color: #fff; cursor: pointer;}
+.allAreaList li a{color: #fff;}
+
 .search{width:400px; background: #23bab5; height:50px; right:0px; position:absolute;}
 .searchInput {position:absolute; left:5px; top:5px;width:310px;height:20px;padding:10px 0px 10px 5px; border: 0 none; background:none; font-size: 14px;background: #fff; }
 .searchBtn{width:86px;height: 50px; position: absolute;right:0; top: 0;  display: block; line-height:50px;color: #fff;text-align: center;font-size: 16px;}

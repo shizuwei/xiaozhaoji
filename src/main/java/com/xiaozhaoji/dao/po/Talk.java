@@ -8,7 +8,7 @@ import lombok.Data;
 public class Talk {
     private Long id;
     private Long collegeId;
-    private String context;
+    private String content;
     private Date holdTime;
     private String address;
     private Date addTime;

@@ -33,7 +33,7 @@ public class TalkServiceImpl implements TalkService {
     public List<TalkDto> list(Long collegeId, PageDto pageDto) {
 
         List<Talk> talks =
-            talkDao.list(collegeId, DateUtils.getTodayStartTime(), DateUtils.getTodayStartTime(30), pageDto);
+            talkDao.list(collegeId, DateUtils.getTodayStartTime(-10), DateUtils.getTodayStartTime(30), pageDto);
         // log.debug("talks = {}", talks);
         return pos2dtos(talks);
 
@@ -46,7 +46,7 @@ public class TalkServiceImpl implements TalkService {
         dto.setTitle(po.getTitle());
         dto.setAddTime(po.getAddTime());
         dto.setAddress(po.getAddress());
-        dto.setContext(po.getContext());
+        dto.setContent(po.getContent());
         dto.setHoldTime(po.getHoldTime());
         dto.setId(po.getId());
         dto.setSrcName(po.getSrcName());

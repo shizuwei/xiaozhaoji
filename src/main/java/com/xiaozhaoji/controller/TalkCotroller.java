@@ -59,9 +59,11 @@ public class TalkCotroller {
         // 学校的宣讲会列表
         PageDto page = new PageDto();
         page.setCurPage(talkRequestDto.getPage());
-        List<TalkDto> talkList = talkService.list(ctx.getCityId(), page);
-        // log.debug("list = {}", talkList);
+        List<TalkDto> talkList = talkService.list(ctx.getCollegeId(), page);
+        log.debug("page={}, list = {},", page, talkList);
         model.put("talks", talkList);
+        model.put("page", page);
+        model.put("ctx", ctx);
 
         return new ModelAndView(new InternalResourceView("/default/talk.jsp"), model);
     }

@@ -1,99 +1,14 @@
-function log(a,b){
-	
-	if(console != undefined){
-		
-		switch(typeof(b))
-		{
-		case 'string':console.log(a+b);break;
-		case 'object':console.log(a+JSON.stringify(b));break;
-		default:console.log(a+b);break;
-		}
-		
-	}else alert(a);
-	
-}
-function openURL(url){
-	//document.write();
-	//window.open(url);
-	//$('body').append("<a id='openURL' target='_blank' href='"+url+"' > </a>");
-	 
-	//$('#openURL').click();
-	//$('#openURL').remove();
-	var sUserAgent = navigator.userAgent.toLowerCase();
-	var bIsIpad = sUserAgent .match(/ipad/i) == "ipad";    //判断是否为 ipad
-	var bIsIphoneOs = sUserAgent .match(/iphone os/i) == "iphone os";//判断是否为iphone os
-	var bIsMidp = sUserAgent .match(/midp/i) == "midp";  //判断是否为 midp
-	var bIsUc = sUserAgent .match(/ucweb/i) == "ucweb";  //判断是否为 ucweb
-	var bIsAndroid = sUserAgent .match(/android/i) == "android";  //判断是否为 android
-	var bIsCE = sUserAgent .match(/windows ce/i) == "windows ce";  //判断是否为 windows ce
-	var bIsWM = sUserAgent .match(/windows mobile/i) == "windows mobile";
-	if(bIsIpad||bIsIphoneOs||bIsMidp||bIsUc||bIsAndroid||bIsCE||bIsWM)
-	{
-		window.location.href = url;
-	}else{
-		
-		var newA = document.createElement("a");
-		newA.id='gg'
-		newA.target='_blank';
-	    newA.href=url;
-	    document.body.appendChild(newA);
-	    newA.click();
-	    setTimeout(function(){document.body.removeChild(newA);},200);
-	    
-	}
-	
-   
-}
-
-$(function(){
-	
-});
-
-$(function(){
-	switch (model.name)
-	{
-		case 'xjh':
-			$('#xjh-head').addClass('cur').siblings().removeClass('cur');
-			break;
-		case 'xjh-content':
-			$('#xjh-head').addClass('cur').siblings().removeClass('cur');
-			break;
-		case 'xyzp':
-			$('#xyzp-head').addClass('cur').siblings().removeClass('cur');
-			break;
-		case 'xyzp-content':
-			$('#xyzp-head').addClass('cur').siblings().removeClass('cur');
-			break;
-		case 'zph':
-			$('#zph-head').addClass('cur').siblings().removeClass('cur');
-			break;
-		case 'zph-content':
-			$('#zph-head').addClass('cur').siblings().removeClass('cur');
-			break;
-		case 'news':
-			$('#news-head').addClass('cur').siblings().removeClass('cur');
-			break;
-		case 'news-content':
-			$('#news-head').addClass('cur').siblings().removeClass('cur');
-			break;
-		default:break;
-	}
-});
-
 function is_mobile(){
 	if ((navigator.userAgent.match(/(iPhone|iPod|Android|ios|iOS|iPad|Backerry|WebOS|Symbian|Windows Phone|Phone)/i)))
 		return true;
-	 
+	else
 		return false;
-	
-	
 }
 
 $(function(){
 	
 	if(model.name == 'news-content')
 		{$("#mask_content").hide(10);return;}
-	
 	
 	//$("#content tbody").css('width','100%');
 	var children = $("#content").find("*");
@@ -162,95 +77,7 @@ $(function(){
  
 })
 
-
-
-function distinctArr(arr,attr){
-    var  newArr=[];
-    if(!arr || arr.length < 2) return arr;
-    var len=arr.length
-    for(var i = 0; i < len; i++){
-        
-    	for(var j = 0; j < len; j++){
-
-            if(arr[i][attr] == arr[j][attr] && i != j)
-            {
-                break;
-            }
-        }  
-    	
-        if(j >= len){
-            newArr.push(arr[i])
-        }
-    }
-    return newArr;
-}
-
-function SHORT(str,len)
-{
-	try{
-		
-		if(typeof(str) == 'number' )
-		{
-			if(str > 999) return '999+'; 
-			else return str;
-		}
-			
-		else if(typeof(str) == 'string')
-		{
-			var l = str.length;
-			if(l <= len) return str;
-			else{
-				if(len > 3)
-					return str.substr(0, len - 3)+'...';
-			}
-		}else return '-'
-		
-	}catch(e) {return '-'};	
-	
-	return str;
-		
-}
-
-
-
-function getAreaAndCity(str_ip,fn)
-{
-	
-	var param = {ip : str_ip };
-	jQuery.getJSON(url_getIp,param,function(data){
-	   
-		var curArea=null,curCity=null;
-		if(data && data.code != undefined && data.code != null && data.code == 0){
-			
-			$(data.data).each(function(i,o)
-					{
-						$(areas).each(function(i,area)
-						{
-							if(area.name.indexOf(o.region) >= 0 || o.region.indexOf(area.name) >= 0)
-							{
-								curArea = area;
-								$(curArea.city).each(function(i,city)
-								{
-									if(city.name.indexOf(o.city) >= 0 || o.city.indexOf(city.name) >= 0)
-									{
-										curCity = city;
-										return false;
-									}
-								});
-								return false;
-							}
-									
-						});		
-					});
-			
-		}
-		
-		
-		if(fn)
-			fn(curArea, curCity);
-	 });
-	 
-}
+ 
 
 //搜索
 

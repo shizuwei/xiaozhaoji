@@ -96,13 +96,21 @@
 			<dt>城市：</dt>
 			<dd id="citys">
 				<c:forEach var='city' items="${curArea.cities}">
-						<c:url var="cityUrl" value="./index.do">
-							<c:param name="cityId" value="${city.id}" />
-						</c:url>
-						<span><a href='${cityUrl}'>${city.name}</a></span>
-						 
-					</c:forEach>
-				
+
+					<c:choose>
+						<c:when test="${city.id == ctx.cityId}">
+							<span class='select'><a href='${cityUrl}'>${city.name}</a></span>
+						</c:when>
+						<c:otherwise>
+							<c:url var="cityUrl" value="./index.do">
+								<c:param name="cityId" value="${city.id}" />
+							</c:url>
+							<span><a href='${cityUrl}'>${city.name}</a></span>
+						</c:otherwise>
+					</c:choose>
+
+				</c:forEach>
+
 			</dd>
 		</dl>
 		<dl>
@@ -110,12 +118,21 @@
 			<dd id="colleges">
 				<!-- <span rel="3" class="select">清华大学</span> -->
 				<c:forEach var='college' items="${colleges}">
-						<c:url var="collegeUrl" value="./index.do">
-							<c:param name="collegeId" value="${college.id}" />
-						</c:url>
-						<span><a href='${collegeUrl}'>${college.name}</a></span>
-						 
-					</c:forEach>
+
+
+					<c:choose>
+						<c:when test="${college.id == ctx.collegeId}">
+							<span class='select'> ${college.name}</span>
+						</c:when>
+						<c:otherwise>
+							<c:url var="collegeUrl" value="./index.do">
+								<c:param name="collegeId" value="${college.id}" />
+							</c:url>
+							<span><a href='${collegeUrl}'>${college.name}</a></span>
+						</c:otherwise>
+					</c:choose>
+
+				</c:forEach>
 			</dd>
 		</dl>
 	</div>
@@ -141,132 +158,29 @@
 							<th>发布时间</th>
 							<th>点击量</th>
 						</tr>
-
-
-						<tr style="background: rgb(255, 255, 255);">
-							<td class="myNm"><a id="123" title="北京帕罗奥图科技有限公司"
-								class="titleAnchor" target="_blank">北京帕罗奥图科技有限公司</a></td>
-							<td>2015-12-23 14:00</td>
-							<td>二教403</td>
-							<td>2015-12-09 ...</td>
-							<td>73</td>
-						</tr>
-						<tr style="background: rgb(255, 255, 255);">
-							<td class="myNm"><a id="112" title="成都数联铭品科技有限公司"
-								class="titleAnchor" target="_blank">成都数联铭品科技有限公司</a></td>
-							<td>2015-12-22 09:00</td>
-							<td>二教403</td>
-							<td>2015-12-09 ...</td>
-							<td>60</td>
-						</tr>
-						<tr style="background: rgb(255, 255, 255);">
-							<td class="myNm"><a id="108" title="清华大学中型就业"
-								class="titleAnchor" target="_blank">清华大学中型就业</a></td>
-							<td>2015-12-22</td>
-							<td>工会俱乐部</td>
-							<td>2015-11-26 ...</td>
-							<td>999+</td>
-						</tr>
-						<tr>
-							<td class="myNm"><a id="101" title="西安交通大学附属中学"
-								class="titleAnchor" target="_blank">西安交通大学附属中学</a></td>
-							<td>2015-12-21 09:30</td>
-							<td>二教403</td>
-							<td>2015-12-07 ...</td>
-							<td>112</td>
-						</tr>
-						<tr>
-							<td class="myNm"><a id="93" title="华润燃气投资(中国)有限公司"
-								class="titleAnchor" target="_blank">华润燃气投资(中国)有限公司</a></td>
-							<td>2015-12-18 18:30</td>
-							<td>19楼205</td>
-							<td>2015-11-26 ...</td>
-							<td>170</td>
-						</tr>
-						<tr>
-							<td class="myNm"><a id="86" title="清华大学中型就业"
-								class="titleAnchor" target="_blank">清华大学中型就业</a></td>
-							<td>2015-12-18</td>
-							<td>工会俱乐部</td>
-							<td>2015-11-19 ...</td>
-							<td>999+</td>
-						</tr>
-						<tr>
-							<td class="myNm"><a id="49" title="安邦保险集团"
-								class="titleAnchor" target="_blank">安邦保险集团</a></td>
-							<td>2015-12-15 19:00</td>
-							<td>主楼接待厅</td>
-							<td>2015-12-09 ...</td>
-							<td>111</td>
-						</tr>
-						<tr>
-							<td class="myNm"><a id="40" title="北京文创知名企业"
-								class="titleAnchor" target="_blank">北京文创知名企业</a></td>
-							<td>2015-12-15 14:00</td>
-							<td>二教会议室</td>
-							<td>2015-12-01 ...</td>
-							<td>351</td>
-						</tr>
-						<tr>
-							<td class="myNm"><a id="42" title="中国节能环保集团"
-								class="titleAnchor" target="_blank">中国节能环保集团</a></td>
-							<td>2015-12-15 14:00</td>
-							<td>二教402</td>
-							<td>2015-12-04 ...</td>
-							<td>999+</td>
-						</tr>
-						<tr>
-							<td class="myNm"><a id="36" title="武汉市" class="titleAnchor"
-								target="_blank">武汉市</a></td>
-							<td>2015-12-15 09:30</td>
-							<td>二教会议室</td>
-							<td>2015-12-10 ...</td>
-							<td>220</td>
-						</tr>
-						<tr style="background: rgb(255, 255, 255);">
-							<td class="myNm"><a id="20" title="比亚迪" class="titleAnchor"
-								target="_blank">比亚迪</a></td>
-							<td>2015-12-14 14:00</td>
-							<td>二教401</td>
-							<td>2015-12-02 ...</td>
-							<td>616</td>
-						</tr>
-						<tr style="background: rgb(255, 255, 255);">
-							<td class="myNm"><a id="23" title="青岛市(青岛高新区)"
-								class="titleAnchor" target="_blank">青岛市(青岛高新区)</a></td>
-							<td>2015-12-14 14:00</td>
-							<td>主楼接待厅</td>
-							<td>2015-12-01 ...</td>
-							<td>994</td>
-						</tr>
-						<tr style="background: rgb(255, 255, 255);">
-							<td class="myNm"><a id="24" title="洛阳市" class="titleAnchor"
-								target="_blank">洛阳市</a></td>
-							<td>2015-12-14 14:00</td>
-							<td>二教会议室</td>
-							<td>2015-12-10 ...</td>
-							<td>251</td>
-						</tr>
-						<tr style="background: rgb(255, 255, 255);">
-							<td class="myNm"><a id="10" title="江苏" class="titleAnchor"
-								target="_blank">江苏</a></td>
-							<td>2015-12-13 10:00</td>
-							<td>综合体育馆</td>
-							<td>2015-12-04 ...</td>
-							<td>932</td>
-						</tr>
-						<tr>
-							<td class="myNm"><a id="9" title="江苏发展" class="titleAnchor"
-								target="_blank">江苏发展</a></td>
-							<td>2015-12-13 09:00</td>
-							<td>主楼接待厅</td>
-							<td>2015-12-07 ...</td>
-							<td>547</td>
-						</tr>
+						<c:forEach var='talk' items="${talks}">
+							<c:url var="talkUrl" value="./talk.do">
+								<c:param name="id" value="${talk.id}" />
+							</c:url>
+							<tr style="background: white;">
+								<td class="myNm"><a title="${talk.title}"
+									class="titleAnchor" target="_blank" href="${talkUrl}">${talk.title}</a>
+								</td>
+								<td>${talk.holdTime}</td>
+								<td>${talk.address}</td>
+								<td>${talk.addTime}</td>
+								<td>${talk.click}</td>
+							</tr>
+						</c:forEach>
 					</tbody>
 				</table>
 			</div>
-			<div class="tPage" id="pagination"></div>
+
+			<jsp:include page="pagination.jsp" flush="true">
+				<jsp:param name="page" value="${page}" />
+				<jsp:param name="url" value="./index.do" />
+			</jsp:include>
+
 		</div>
 		<!-- right-side-box -->
 		<div class="sider">

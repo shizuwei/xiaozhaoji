@@ -11,7 +11,21 @@ public class PageDto {
      * 
      */
     private int totalElementCount;
-    private final static int DEFAULT_PAGE_ELEMENT_CNT = 20;
+    private final static int DEFAULT_PAGE_ELEMENT_CNT = 10;
+
+    public int getPageElementCount() {
+        return DEFAULT_PAGE_ELEMENT_CNT;
+    }
+
+    public PageDto() {
+        totalElementCount = 0;
+        curPage = 1;
+    }
+
+    public String toString() {
+        return getFirstNumber() + ":" + getCurPageElementCount() + " curPage = " + getCurPage() + " totalPates = "
+            + getTotalPages();
+    }
 
     /**
      * 从0开始
@@ -51,8 +65,12 @@ public class PageDto {
      * @return
      */
     public int getCurPageElementCount() {
-
-        return getTotalElementCount() - getFirstNumber();
+        // 剩下的记录总数
+        int leftEleCnt = getTotalElementCount() - getFirstNumber();
+        if (leftEleCnt >= getPageElementCount()) {
+            return getPageElementCount();
+        }
+        return leftEleCnt % getPageElementCount();
     }
 
     public int getTotalElementCount() {
