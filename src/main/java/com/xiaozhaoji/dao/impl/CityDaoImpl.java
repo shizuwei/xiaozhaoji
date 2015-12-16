@@ -76,4 +76,13 @@ public class CityDaoImpl extends SpringCommonDao implements CityDao {
         return this.getNamedJdbcTemplate().queryForObject(sql, paramMap, new BeanPropertyRowMapper<City>(City.class));
 
     }
+
+    @Override
+    public String getCityNameById(Long id) {
+        String sql = "select name from city where id=:id  and valid = 1";
+        Map<String, Object> paramMap = Maps.newHashMap();
+        paramMap.put("id", id);
+        return this.getNamedJdbcTemplate().queryForObject(sql, paramMap, String.class);
+
+    }
 }

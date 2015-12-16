@@ -24,4 +24,6 @@ public class TalkRequestDto {
 
     Long collegeId;
 
+    Long id;
+
 }

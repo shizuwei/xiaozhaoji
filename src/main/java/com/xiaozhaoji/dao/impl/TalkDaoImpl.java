@@ -7,7 +7,7 @@ package com.xiaozhaoji.dao.impl;
 import com.google.common.collect.Maps;
 import com.xiaozhaoji.dao.TalkDao;
 import com.xiaozhaoji.dao.po.Talk;
-import com.xiaozhaoji.service.dto.request.PageDto;
+import com.xiaozhaoji.service.dto.request.Page;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
@@ -32,7 +32,8 @@ public class TalkDaoImpl extends SpringCommonDao implements TalkDao {
 
     @Override
     public int addClick(Long id) {
-
+        if (id == null)
+            return 0;
         String sql = "update talk set click = click + 1 where id = :id";
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("id", id);
@@ -41,7 +42,7 @@ public class TalkDaoImpl extends SpringCommonDao implements TalkDao {
     }
 
     @Override
-    public List<Talk> list(Long collegeId, Date startTime, Date endTime, PageDto page) {
+    public List<Talk> list(Long collegeId, Date startTime, Date endTime, Page page) {
 
         String countSql =
             "select count(id) from talk where college_id = :collegeId and add_time >= :startTime and add_time < :endTime";

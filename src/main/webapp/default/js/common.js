@@ -5,12 +5,29 @@ function is_mobile(){
 		return false;
 }
 
+//搜索
+
+function searchFbFun(tureInput,falseInput){
+   falseInput.focus(function(e) {
+      tureInput.show(); 
+      falseInput.hide();
+      if(tureInput.val().length>0)
+    	  hint.show();
+      tureInput.focus();
+  });
+  tureInput.blur(function(e) {                
+      if (tureInput.val() == '') {
+        falseInput.show();
+        tureInput.hide();
+        hint.hide();
+      }
+  }); 
+}
+
 $(function(){
-	
-	if(model.name == 'news-content')
-		{$("#mask_content").hide(10);return;}
-	
 	//$("#content tbody").css('width','100%');
+	
+	if(!$("#content")) return;
 	var children = $("#content").find("*");
 	children.removeClass();
 
@@ -77,26 +94,6 @@ $(function(){
  
 })
 
- 
-
-//搜索
-
-function searchFbFun(tureInput,falseInput){
-   falseInput.focus(function(e) {
-      tureInput.show(); 
-      falseInput.hide();
-      if(tureInput.val().length>0)
-    	  hint.show();
-      tureInput.focus();
-  });
-  tureInput.blur(function(e) {                
-      if (tureInput.val() == '') {
-        falseInput.show();
-        tureInput.hide();
-        hint.hide();
-      }
-  }); 
-}
 
 function dispHint(){
 	

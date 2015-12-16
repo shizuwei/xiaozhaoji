@@ -106,11 +106,11 @@ public class WebFilter implements Filter {
                 Cookie cityCookie = getCookieByName(req.getCookies(), WebContext.COOKIE_CITY_ID_NAME);
 
                 if (areaCookie != null && StringUtils.isNumeric(areaCookie.getValue())) {
-                    ctx.setAreaId(Long.parseLong(areaCookie.getValue()));
+                    this.setArea(ctx, Long.parseLong(areaCookie.getValue()));
                 }
 
                 if (cityCookie != null && StringUtils.isNumeric(cityCookie.getValue())) {
-                    ctx.setCityId(Long.parseLong(cityCookie.getValue()));
+                    this.setCity(ctx, Long.parseLong(cityCookie.getValue()));
                 }
             }
 
@@ -124,21 +124,24 @@ public class WebFilter implements Filter {
                     // 获取后，放入ctx
                     Long cityId = cityDao.getCityIdByCityName(data.getCity());
                     Long areaId = areaDao.getAreaIdByAreaName(data.getArea());
-                    ctx.setAreaId(areaId);
-                    ctx.setCityId(cityId);
+                    this.setCity(ctx, cityId);
+                    this.setArea(ctx, areaId);
                 } else {
-                    ctx.setAreaId(AreaDao.DEFAULT_AREA_ID);
-                    ctx.setCityId(CityDao.DEFAULT_CITY_ID);
+                    ctx.setAreaId(null);
+                    ctx.setCityId(null);
                 }
 
-                setCookie(res, WebContext.COOKIE_AREA_ID_NAME, ctx.getAreaId().toString());
-                setCookie(res, WebContext.COOKIE_CITY_ID_NAME, ctx.getCityId().toString());
+                setCookie(res, WebContext.COOKIE_AREA_ID_NAME,
+                    ctx.getAreaId() != null ? ctx.getAreaId().toString() : null);
+                setCookie(res, WebContext.COOKIE_CITY_ID_NAME,
+                    ctx.getCityId() != null ? ctx.getCityId().toString() : null);
             }
             log.info("ctx = {}", ctx);
             session.setAttribute(WebContext.CTX_NAME, ctx);
         } else {
             if (tryGetIdFromParameter(ctx, req)) {
-                setCookie(res, WebContext.COOKIE_AREA_ID_NAME, ctx.getAreaId().toString());
+                setCookie(res, WebContext.COOKIE_AREA_ID_NAME,
+                    ctx.getAreaId() != null ? ctx.getAreaId().toString() : null);
                 setCookie(res, WebContext.COOKIE_CITY_ID_NAME,
                     ctx.getCityId() != null ? ctx.getCityId().toString() : null);
             }
@@ -158,27 +161,25 @@ public class WebFilter implements Filter {
         try {
 
             if (StringUtils.isNotBlank(req.getParameter("collegeId"))) {
-                ctx.setCollegeId(Long.parseLong(req.getParameter("collegeId")));
+                this.setCollege(ctx, Long.parseLong(req.getParameter("collegeId")));
             }
 
             if (StringUtils.isNotBlank(req.getParameter("cityId"))) {
-                ctx.setCityId(Long.parseLong(req.getParameter("cityId")));
+                this.setCity(ctx, Long.parseLong(req.getParameter("cityId")));
             } else if (ctx.getCollegeId() != null) {
-                ctx.setCityId(this.collegeDao.getCityIdByCollegeId(ctx.getCollegeId()));
+                this.setCity(ctx, this.collegeDao.getCityIdByCollegeId(ctx.getCollegeId()));
             }
 
             if (StringUtils.isNotBlank(req.getParameter("areaId"))) {
                 Long areaId = Long.parseLong(req.getParameter("areaId"));
                 if (ctx.getAreaId() != areaId) {
-                    ctx.setAreaId(areaId);
-                    ctx.setCityId(null);
+                    this.setArea(ctx, areaId);
                 }
 
             } else if (ctx.getCityId() != null) {
-                ctx.setAreaId(this.cityDao.getAreaIdByCityId(ctx.getCityId()));
+                this.setArea(ctx, this.cityDao.getAreaIdByCityId(ctx.getCityId()));
             } else {
-                ctx.setAreaId(AreaDao.DEFAULT_AREA_ID);
-                // ctx.setCityId(this.cityDao.getDefaultCity(ctx.getAreaId()).getId());
+                this.setArea(ctx, AreaDao.DEFAULT_AREA_ID);
             }
 
             log.info("ctx = {}", ctx);
@@ -190,6 +191,21 @@ public class WebFilter implements Filter {
         }
 
         return false;
+    }
+
+    private void setArea(WebContext ctx, Long id) {
+        ctx.setAreaId(id);
+        ctx.setAreaName(this.areaDao.getAreaNameById(id));
+    }
+
+    private void setCity(WebContext ctx, Long id) {
+        ctx.setCityId(id);
+        ctx.setCityName(this.cityDao.getCityNameById(id));
+    }
+
+    private void setCollege(WebContext ctx, Long id) {
+        ctx.setCollegeId(id);
+        ctx.setCollegeName(this.collegeDao.getCollegeNameById(id));
     }
 
     private static Cookie getCookieByName(Cookie[] cookies, String name) {

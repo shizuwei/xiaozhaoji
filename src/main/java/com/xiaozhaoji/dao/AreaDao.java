@@ -12,6 +12,8 @@ public interface AreaDao {
 
     public final static Long DEFAULT_AREA_ID = 1L;
 
+    String getAreaNameById(Long id);
+
     Area getAreaById(Long id);
 
     List<Area> getAll();

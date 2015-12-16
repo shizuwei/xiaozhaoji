@@ -9,6 +9,39 @@ public class WebContext {
     private Long areaId = 1L;
     private Long cityId;
     private Long collegeId;
+    private String areaName;
+    private String cityName;
+    private String collegeName;
+
+    public String getAreaName() {
+
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+
+        this.areaName = areaName;
+    }
+
+    public String getCityName() {
+
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+
+        this.cityName = cityName;
+    }
+
+    public String getCollegeName() {
+
+        return collegeName;
+    }
+
+    public void setCollegeName(String collegeName) {
+
+        this.collegeName = collegeName;
+    }
 
     public Long getAreaId() {
 

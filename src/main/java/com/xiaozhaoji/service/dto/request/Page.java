@@ -1,25 +1,37 @@
 package com.xiaozhaoji.service.dto.request;
 
-public class PageDto {
+public class Page {
+
+    private final static int DEFAULT_PAGE_ELEMENT_CNT = 10;
     /**
      * 页数从1开始
      */
     private int curPage;
+
+    private int pageElementCount = 10;
 
     /**
      * 条目数
      * 
      */
     private int totalElementCount;
-    private final static int DEFAULT_PAGE_ELEMENT_CNT = 10;
 
     public int getPageElementCount() {
-        return DEFAULT_PAGE_ELEMENT_CNT;
+        return pageElementCount;
     }
 
-    public PageDto() {
+    public void setPageElementCount(int pageElementCount) {
+        this.pageElementCount = pageElementCount;
+    }
+
+    public Page() {
         totalElementCount = 0;
         curPage = 1;
+        this.pageElementCount = DEFAULT_PAGE_ELEMENT_CNT;
+    }
+
+    public Page(int pageEleCnt) {
+        this.pageElementCount = pageEleCnt;
     }
 
     public String toString() {
@@ -31,7 +43,7 @@ public class PageDto {
      * 从0开始
      */
     public int getFirstNumber() {
-        return (curPage - 1) * DEFAULT_PAGE_ELEMENT_CNT;
+        return (curPage - 1) * pageElementCount;
     }
 
     /**
@@ -55,8 +67,8 @@ public class PageDto {
 
     public int getTotalPages() {
 
-        return this.getTotalElementCount() / DEFAULT_PAGE_ELEMENT_CNT
-            + (this.getTotalElementCount() % DEFAULT_PAGE_ELEMENT_CNT != 0 ? 1 : 0);
+        return this.getTotalElementCount() / pageElementCount
+            + (this.getTotalElementCount() % pageElementCount != 0 ? 1 : 0);
     }
 
     /**

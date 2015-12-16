@@ -13,6 +13,8 @@ public interface CityDao {
 
     City getCityById(Long id);
 
+    String getCityNameById(Long id);
+
     List<City> getCityByAreaId(Long areaId);
 
     Long getCityIdByCityName(String name);

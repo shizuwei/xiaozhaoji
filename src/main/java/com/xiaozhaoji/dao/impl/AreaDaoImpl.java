@@ -52,4 +52,14 @@ public class AreaDaoImpl extends SpringCommonDao implements AreaDao {
         }
         return list.get(0);
     }
+
+    @Override
+    public String getAreaNameById(Long id) {
+
+        String sql = "select name from area where id=:id and valid = 1";
+        Map<String, Object> paramMap = Maps.newHashMap();
+        paramMap.put("id", id);
+        return this.getNamedJdbcTemplate().queryForObject(sql, paramMap, String.class);
+
+    }
 }

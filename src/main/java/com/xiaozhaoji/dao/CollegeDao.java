@@ -12,6 +12,8 @@ public interface CollegeDao {
 
     public final static Long DEFULT_COLLEGE_ID = 1L;
 
+    String getCollegeNameById(Long id);
+
     College getCollegeById(Long id);
 
     List<College> getCollegeByCityId(Long cityId);
