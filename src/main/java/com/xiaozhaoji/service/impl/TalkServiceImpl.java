@@ -24,13 +24,14 @@ public class TalkServiceImpl implements TalkService {
 
     @Override
     public TalkDto getById(Long id) {
+        talkDao.addClick(id);
         return po2dto(talkDao.getById(id));
     }
 
     @Override
     public List<TalkDto> list(Long collegeId, Page pageDto) {
         List<Talk> talks =
-            talkDao.list(collegeId, DateUtils.getTodayStartTime(-10), DateUtils.getTodayStartTime(30), pageDto);
+            talkDao.list(collegeId, DateUtils.getTodayStartTime(-100), DateUtils.getTodayStartTime(30), pageDto);
         return pos2dtos(talks);
     }
 
@@ -54,7 +55,7 @@ public class TalkServiceImpl implements TalkService {
         for (Talk po : pos) {
             dtos.add(po2dto(po));
         }
-        log.debug("news = {}", pos);
+        log.debug("talks = {}", pos);
         return dtos;
     }
 }

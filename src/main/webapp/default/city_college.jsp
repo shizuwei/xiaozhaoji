@@ -5,8 +5,10 @@
 	</div> -->
 <div class="productFilter">
 	<div class="filterTitle">
-		当前位置: ${ctx.areaName} >> ${ctx.cityName} >> ${ctx.collegeName} <span
-			class="righttop">点击 ▲</span>
+		当前位置: ${ctx.areaName} 
+		<c:if test="${not empty ctx.cityName}">&gt;&gt;${ctx.cityName}</c:if> 
+		<c:if test="${not empty ctx.collegeName}">&gt;&gt;${ctx.collegeName}</c:if> 
+		<span class="righttop">点击 ▲</span>
 	</div>
 	<dl style="display: none">
 		<dt>城市：</dt>
@@ -15,11 +17,12 @@
 
 				<c:choose>
 					<c:when test="${city.id == ctx.cityId}">
-						<span class='select'><a href='${cityUrl}'>${city.name}</a></span>
+						<span class='select'><a href='#'>${city.name}</a></span>
 					</c:when>
 					<c:otherwise>
 						<c:url var="cityUrl" value="./index.do">
 							<c:param name="cityId" value="${city.id}" />
+							<c:param name="areaId" value="${ctx.areaId}"/>
 						</c:url>
 						<span><a href='${cityUrl}'>${city.name}</a></span>
 					</c:otherwise>
@@ -41,6 +44,8 @@
 					<c:otherwise>
 						<c:url var="collegeUrl" value="./index.do">
 							<c:param name="collegeId" value="${college.id}" />
+							<c:param name="areaId" value="${ctx.areaId}"/>
+							<c:param name="cityId" value="${ctx.cityId}"/>
 						</c:url>
 						<span><a href='${collegeUrl}'>${college.name}</a></span>
 					</c:otherwise>

@@ -83,6 +83,5 @@ public class CityDaoImpl extends SpringCommonDao implements CityDao {
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("id", id);
         return this.getNamedJdbcTemplate().queryForObject(sql, paramMap, String.class);
-
     }
 }

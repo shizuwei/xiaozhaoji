@@ -22,7 +22,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -98,20 +97,18 @@ public class WebFilter implements Filter {
 
         if (ctx == null) {
             ctx = new WebContext();
-            log.info("session id = {}", session.getId());
+            // 从参数获取areaId,cityId,collegeId
+            if (StringUtils.isNotBlank(req.getParameter("areaId"))) {
+                Long areaId = Long.parseLong(req.getParameter("areaId"));
+                this.setArea(ctx, areaId);
+            }
 
-            if (!tryGetIdFromParameter(ctx, req)) {
-                // 先从cookie获取
-                Cookie areaCookie = getCookieByName(req.getCookies(), WebContext.COOKIE_AREA_ID_NAME);
-                Cookie cityCookie = getCookieByName(req.getCookies(), WebContext.COOKIE_CITY_ID_NAME);
+            if (StringUtils.isNotBlank(req.getParameter("collegeId"))) {
+                this.setCollege(ctx, Long.parseLong(req.getParameter("collegeId")));
+            }
 
-                if (areaCookie != null && StringUtils.isNumeric(areaCookie.getValue())) {
-                    this.setArea(ctx, Long.parseLong(areaCookie.getValue()));
-                }
-
-                if (cityCookie != null && StringUtils.isNumeric(cityCookie.getValue())) {
-                    this.setCity(ctx, Long.parseLong(cityCookie.getValue()));
-                }
+            if (StringUtils.isNotBlank(req.getParameter("cityId"))) {
+                this.setCity(ctx, Long.parseLong(req.getParameter("cityId")));
             }
 
             if (ctx.getAreaId() == null) {
@@ -130,94 +127,70 @@ public class WebFilter implements Filter {
                     ctx.setAreaId(null);
                     ctx.setCityId(null);
                 }
-
-                setCookie(res, WebContext.COOKIE_AREA_ID_NAME,
-                    ctx.getAreaId() != null ? ctx.getAreaId().toString() : null);
-                setCookie(res, WebContext.COOKIE_CITY_ID_NAME,
-                    ctx.getCityId() != null ? ctx.getCityId().toString() : null);
             }
-            log.info("ctx = {}", ctx);
             session.setAttribute(WebContext.CTX_NAME, ctx);
         } else {
-            if (tryGetIdFromParameter(ctx, req)) {
-                setCookie(res, WebContext.COOKIE_AREA_ID_NAME,
-                    ctx.getAreaId() != null ? ctx.getAreaId().toString() : null);
-                setCookie(res, WebContext.COOKIE_CITY_ID_NAME,
-                    ctx.getCityId() != null ? ctx.getCityId().toString() : null);
-            }
+            // 如果areaId变了,cityId,collegeId都无效,依次类推
+            getParamsFromReq(ctx, req);
         }
+
+        log.info("session id = {}, ctx = {}", session.getId(), ctx);
         chain.doFilter(request, response);
     }
 
-    private static void setCookie(HttpServletResponse res, String name, String value) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setMaxAge(3600);
-        cookie.setPath("/");
-        res.addCookie(cookie);
-    }
-
-    private boolean tryGetIdFromParameter(WebContext ctx, HttpServletRequest req) {
-
-        try {
-
-            if (StringUtils.isNotBlank(req.getParameter("collegeId"))) {
-                this.setCollege(ctx, Long.parseLong(req.getParameter("collegeId")));
-            }
-
-            if (StringUtils.isNotBlank(req.getParameter("cityId"))) {
-                this.setCity(ctx, Long.parseLong(req.getParameter("cityId")));
-            } else if (ctx.getCollegeId() != null) {
-                this.setCity(ctx, this.collegeDao.getCityIdByCollegeId(ctx.getCollegeId()));
-            }
-
-            if (StringUtils.isNotBlank(req.getParameter("areaId"))) {
-                Long areaId = Long.parseLong(req.getParameter("areaId"));
-                if (ctx.getAreaId() != areaId) {
-                    this.setArea(ctx, areaId);
-                }
-
-            } else if (ctx.getCityId() != null) {
-                this.setArea(ctx, this.cityDao.getAreaIdByCityId(ctx.getCityId()));
+    private void getParamsFromReq(WebContext ctx, HttpServletRequest req) {
+        if (StringUtils.isNotBlank(req.getParameter("areaId"))) {
+            Long areaId = Long.parseLong(req.getParameter("areaId"));
+            if (areaId != null && (ctx.getAreaId() == null || !ctx.getAreaId().equals(areaId))) {
+                this.setArea(ctx, areaId);
+                this.setCity(ctx, null);
+                this.setCollege(ctx, null);
             } else {
-                this.setArea(ctx, AreaDao.DEFAULT_AREA_ID);
-            }
+                if (StringUtils.isNotBlank(req.getParameter("cityId"))) {
+                    Long cityId = Long.parseLong(req.getParameter("cityId"));
+                    if (cityId != null && (ctx.getCityId() == null || !ctx.getCityId().equals(cityId))) {
+                        this.setCity(ctx, cityId);
+                        this.setCollege(ctx, null);
+                    } else {
+                        if (StringUtils.isNotBlank(req.getParameter("collegeId"))) {
+                            Long collegeId = Long.parseLong(req.getParameter("collegeId"));
+                            if (collegeId != null
+                                && (ctx.getCollegeId() == null || !ctx.getCollegeId().equals(collegeId))) {
+                                this.setCollege(ctx, collegeId);
+                            }
+                        }
 
-            log.info("ctx = {}", ctx);
-            if (ctx.getAreaId() != null) {
-                return true;
+                    }
+                }
             }
-        } catch (Exception e) {
-            return false;
         }
-
-        return false;
     }
 
     private void setArea(WebContext ctx, Long id) {
         ctx.setAreaId(id);
-        ctx.setAreaName(this.areaDao.getAreaNameById(id));
+        if (id != null) {
+            ctx.setAreaName(this.areaDao.getAreaNameById(id));
+        } else {
+            ctx.setAreaName(StringUtils.EMPTY);
+        }
     }
 
     private void setCity(WebContext ctx, Long id) {
         ctx.setCityId(id);
-        ctx.setCityName(this.cityDao.getCityNameById(id));
+        if (id != null) {
+            ctx.setCityName(this.cityDao.getCityNameById(id));
+        } else {
+            ctx.setCityName(StringUtils.EMPTY);
+        }
     }
 
     private void setCollege(WebContext ctx, Long id) {
         ctx.setCollegeId(id);
-        ctx.setCollegeName(this.collegeDao.getCollegeNameById(id));
-    }
-
-    private static Cookie getCookieByName(Cookie[] cookies, String name) {
-        if (cookies == null || name == null) {
-            return null;
+        if (id != null) {
+            ctx.setCollegeName(this.collegeDao.getCollegeNameById(id));
+        } else {
+            ctx.setCollegeName(StringUtils.EMPTY);
         }
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(name)) {
-                return cookie;
-            }
-        }
-        return null;
     }
 
     /**

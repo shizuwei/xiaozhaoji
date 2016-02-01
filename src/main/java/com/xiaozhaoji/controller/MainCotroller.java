@@ -8,6 +8,7 @@ import com.xiaozhaoji.service.CityService;
 import com.xiaozhaoji.service.CollegeService;
 import com.xiaozhaoji.service.NewsService;
 import com.xiaozhaoji.service.TalkService;
+import com.xiaozhaoji.service.dto.NewsDto;
 import com.xiaozhaoji.service.dto.TalkDto;
 import com.xiaozhaoji.service.dto.request.Page;
 
@@ -43,12 +44,15 @@ public class MainCotroller {
     @Resource
     private NewsService newsService;
 
+    private WebContext getWebContext(HttpServletRequest request) {
+        return (WebContext) request.getSession().getAttribute(WebContext.CTX_NAME);
+    }
+
     @RequestMapping(value = "talk/index.do", method = RequestMethod.GET)
-    public ModelAndView index(@ModelAttribute TalkRequestDto talkRequestDto, HttpServletRequest request,
+    public ModelAndView talkIndex(@ModelAttribute TalkRequestDto talkRequestDto, HttpServletRequest request,
         HttpServletResponse response) {
 
-        WebContext ctx = (WebContext) request.getSession().getAttribute(WebContext.CTX_NAME);
-
+        WebContext ctx = getWebContext(request);
         // 地区的城市列表
         Map<String, Object> model = Maps.newHashMap();
         getArea(ctx, model);
@@ -72,10 +76,46 @@ public class MainCotroller {
         WebContext ctx = (WebContext) request.getSession().getAttribute(WebContext.CTX_NAME);
         Map<String, Object> model = Maps.newHashMap();
         getArea(ctx, model);
+        getNews(ctx, model, 10);
         Long id = talkRequestDto.getId();
         TalkDto talk = talkService.getById(id);
         model.put("talk", talk);
-        return new ModelAndView(new InternalResourceView("/default/content.jsp"), model);
+        return new ModelAndView(new InternalResourceView("/default/talk_content.jsp"), model);
+    }
+
+    @RequestMapping(value = "news/index.do", method = RequestMethod.GET)
+    public ModelAndView newsIndex(@ModelAttribute TalkRequestDto talkRequestDto, HttpServletRequest request,
+        HttpServletResponse response) {
+
+        WebContext ctx = (WebContext) request.getSession().getAttribute(WebContext.CTX_NAME);
+
+        // 地区的城市列表
+        Map<String, Object> model = Maps.newHashMap();
+        // getArea(ctx, model);
+        // getCollege(ctx, model);
+        getNews(ctx, model, 10);
+        // 学校的宣讲会列表
+        Page page = new Page();
+        page.setCurPage(talkRequestDto.getPage());
+        List<NewsDto> list = newsService.list(page);
+        log.debug("page={}, list = {},", page, list);
+        model.put("list", list);
+        model.put("page", page);
+        model.put("ctx", ctx);
+
+        return new ModelAndView(new InternalResourceView("/default/news.jsp"), model);
+    }
+
+    @RequestMapping(value = "news/get.do", method = RequestMethod.GET)
+    public ModelAndView news(@ModelAttribute TalkRequestDto talkRequestDto, HttpServletRequest request,
+        HttpServletResponse response) {
+        WebContext ctx = (WebContext) request.getSession().getAttribute(WebContext.CTX_NAME);
+        Map<String, Object> model = Maps.newHashMap();
+        getArea(ctx, model);
+        Long id = talkRequestDto.getId();
+        NewsDto news = newsService.getById(id);
+        model.put("news", news);
+        return new ModelAndView(new InternalResourceView("/default/news_content.jsp"), model);
     }
 
     private void getArea(WebContext ctx, Map<String, Object> model) {
@@ -101,4 +141,7 @@ public class MainCotroller {
         }
     }
 
+    public static void main(String[] args) {
+        // AbstractSingleBeanDefinitionParser e;
+    }
 }

@@ -41,23 +41,21 @@
 		<a href="#" class="logo" title="校招季"><img
 			src="../default/img/logo.png" alt="校招季"></a>
 		<div class="areaTab">
-
-			<span class="curArea">地区：${curArea.name} </span>
-
-			<div class="allArea" style="display: none;">
-				<ul class="allAreaList">
-					<c:forEach var='area' items="${areas}">
-						<c:url var="areaUrl" value="./index.do">
-							<c:param name="areaId" value="${area.id}" />
-						</c:url>
-						<li><a href='${areaUrl}'>${area.name}</a></li>
-					</c:forEach>
-				</ul>
-				<p class="allAreaBg"></p>
-			</div>
-
+			<c:if test="${not empty curArea.name}">
+				<span class="curArea">地区：${curArea.name}</span>
+				<div class="allArea" style="display: none;">
+					<ul class="allAreaList">
+						<c:forEach var='area' items="${areas}">
+							<c:url var="areaUrl" value="./index.do">
+								<c:param name="areaId" value="${area.id}" />
+							</c:url>
+							<li><a href='${areaUrl}'>${area.name}</a></li>
+						</c:forEach>
+					</ul>
+					<p class="allAreaBg"></p>
+				</div>
+			</c:if>
 		</div>
-
 
 		<div class="search">
 			<input type="text" name="q" style="display: none" id="txt_Keywords"

@@ -21,8 +21,8 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public NewsDto getById(Long id) {
-
         News news = newsDao.getById(id);
+        newsDao.addClick(id);
         return po2Dto(news);
 
     }
@@ -53,4 +53,5 @@ public class NewsServiceImpl implements NewsService {
         List<News> pos = newsDao.list(pageDto);
         return po2Dtos(pos);
     }
+
 }

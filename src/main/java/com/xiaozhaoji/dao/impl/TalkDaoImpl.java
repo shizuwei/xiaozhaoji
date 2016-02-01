@@ -27,6 +27,7 @@ public class TalkDaoImpl extends SpringCommonDao implements TalkDao {
         String sql = "select * from talk where id=:id";
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("id", id);
+        log.debug("sql = {}, params = {}", sql, paramMap);
         return this.getNamedJdbcTemplate().queryForObject(sql, paramMap, new BeanPropertyRowMapper<Talk>(Talk.class));
     }
 
@@ -37,6 +38,7 @@ public class TalkDaoImpl extends SpringCommonDao implements TalkDao {
         String sql = "update talk set click = click + 1 where id = :id";
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("id", id);
+        log.debug("sql = {}, params = {}", sql, paramMap);
         return this.getNamedJdbcTemplate().update(sql, paramMap);
 
     }
@@ -45,22 +47,27 @@ public class TalkDaoImpl extends SpringCommonDao implements TalkDao {
     public List<Talk> list(Long collegeId, Date startTime, Date endTime, Page page) {
 
         String countSql =
-            "select count(id) from talk where college_id = :collegeId and add_time >= :startTime and add_time < :endTime";
+            "select count(id) from talk where " + "college_id = :collegeId " + "and add_time >= :startTime "
+                + "and add_time < :endTime";
 
         String sql =
-            "select id,college_id,title,hold_time,address,add_time,src_url,src_name,click from talk where college_id = :collegeId and add_time >= :startTime and add_time < :endTime order by add_time desc limit :start,:count";
+            "select id,college_id,title,hold_time,address,add_time,src_url,src_name,click "
+                + "from talk where college_id = :collegeId and add_time >= :startTime "
+                + "and add_time < :endTime order by add_time desc limit :start,:count";
         Map<String, Object> paramMap = Maps.newHashMap();
 
         paramMap.put("startTime", startTime);
         paramMap.put("endTime", endTime);
         paramMap.put("collegeId", collegeId);
 
+        log.debug("sql = {}, params = {}", sql, paramMap);
         Integer cnt = this.getNamedJdbcTemplate().queryForObject(countSql, paramMap, Integer.class);
         log.debug(" cnt = {}", cnt);
         page.setTotalElementCount(cnt);
         log.debug("limit {},{}", page.getFirstNumber(), page.getCurPageElementCount());
         paramMap.put("start", page.getFirstNumber());
         paramMap.put("count", page.getCurPageElementCount());
+        log.debug("sql = {}, params = {}", sql, paramMap);
         return this.getNamedJdbcTemplate().query(sql, paramMap, new BeanPropertyRowMapper<Talk>(Talk.class));
 
     }
