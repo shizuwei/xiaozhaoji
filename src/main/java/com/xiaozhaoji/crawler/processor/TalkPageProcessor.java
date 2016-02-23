@@ -101,7 +101,6 @@ public class TalkPageProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
 
-        // log.info("page = {}", page.getUrl());
         String url = page.getUrl().toString();
 
         if (url.indexOf("uni-") < 0) {
