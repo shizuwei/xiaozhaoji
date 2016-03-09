@@ -247,6 +247,5 @@
 		<hibernate.version>4.3.8.Final</hibernate.version>
 		<jackson.version>2.1.2</jackson.version>
 		<log4j.version>2.4.1</log4j.version>
-		<!-- <project.version>0.0.1-SNAPSHOT</project.version> -->
 	</properties>
 </project>
