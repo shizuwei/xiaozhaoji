@@ -25,7 +25,7 @@
 				<version>2.1</version>
 				<configuration>
 					<!-- 注意此处的url -->
-					<url>http://xiaozhaoji.com:8080/manager</url>
+					<url>http://xiaozhaoji.com:8080/manager/text</url>
 					<server>tomcat7</server> <!-- 此处的名字必须和setting.xml中配置的ID一致 -->
 					<path>/xiaozhaoji</path> <!-- 此处的名字是项目发布的工程名 -->
 				</configuration>
